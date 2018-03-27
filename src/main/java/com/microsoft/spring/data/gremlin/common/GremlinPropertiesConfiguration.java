@@ -5,14 +5,14 @@
  */
 package com.microsoft.spring.data.gremlin.common;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @ConfigurationProperties(prefix = "gremlin")
-public class PropertiesConfiguration {
+public class GremlinPropertiesConfiguration {
 
     private String endpoint;
 
