@@ -12,7 +12,6 @@ import java.lang.annotation.*;
 
 /**
  * Specifies the domain class as graph, with one optional collection(String).
- * @author Incarnation-p-lee
  */
 @Persistent
 @Inherited

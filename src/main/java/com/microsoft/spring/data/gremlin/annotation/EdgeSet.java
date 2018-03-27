@@ -11,7 +11,6 @@ import java.lang.annotation.*;
 
 /**
  * Specifies the field as EdgeSet of graph.
- * @author Incarnation-p-lee
  */
 @Persistent
 @Inherited
