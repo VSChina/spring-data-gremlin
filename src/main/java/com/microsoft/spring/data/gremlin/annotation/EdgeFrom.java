@@ -11,7 +11,6 @@ import java.lang.annotation.*;
 
 /**
  * Specifies the field as source of one edge.
- * @author Incarnation-p-lee
  */
 @Persistent
 @Inherited

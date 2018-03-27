@@ -12,7 +12,6 @@ import java.lang.annotation.*;
 
 /**
  * Specifies the class as vertex in graph, with one optional label(String).
- * @author Incarnation-p-lee
  */
 @Persistent
 @Inherited
