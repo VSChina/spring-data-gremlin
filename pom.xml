@@ -18,8 +18,10 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <spring.springframework.version>5.0.1.RELEASE</spring.springframework.version>
-        <spring.boot.starter.test.version>2.0.0.RELEASE</spring.boot.starter.test.version>
         <spring.data.version>2.0.0.RELEASE</spring.data.version>
+        <spring.boot.version>2.0.0.RELEASE</spring.boot.version>
+        <spring.boot.starter.test.version>2.0.0.RELEASE</spring.boot.starter.test.version>
+        <spring.boot.configuration.processor.version>2.0.0.RELEASE</spring.boot.configuration.processor.version>
 
         <org.apache.tinkerpop.gremlin.driver.version>3.2.4</org.apache.tinkerpop.gremlin.driver.version>
         <org.projectlombok.version>1.16.18</org.projectlombok.version>
@@ -84,6 +86,20 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${org.projectlombok.version}</version>
+        </dependency>
+
+        <!-- Spring Boot Configuration Processor -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+            <version>${spring.boot.configuration.processor.version}</version>
+        </dependency>
+
+        <!-- Spring Boot -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
 
     </dependencies>
