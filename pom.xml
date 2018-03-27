@@ -178,15 +178,12 @@
                         <format>xml</format>
                     </formats>
                     <check>
-                        <haltOnFailure>true</haltOnFailure>
+                        <haltOnFailure>false</haltOnFailure>
                         <branchRate>65</branchRate>
                         <totalBranchRate>65</totalBranchRate>
                     </check>
                     <instrumentation>
-                        <excludes>
-                            <exclude>com/microsoft/azure/**/GetHashMac.class</exclude>
-                            <exclude>com/microsoft/azure/**/Constants.class</exclude>
-                        </excludes>
+                        <excludes></excludes>
                     </instrumentation>
                 </configuration>
             </plugin>
