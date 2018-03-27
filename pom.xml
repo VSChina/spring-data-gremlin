@@ -19,6 +19,7 @@
         <spring.springframework.version>5.0.1.RELEASE</spring.springframework.version>
         <spring.data.version>2.0.1.RELEASE</spring.data.version>
         <spring.boot.starter.test.version>1.5.8.RELEASE</spring.boot.starter.test.version>
+        <spring.data.releasetrain.version>Ingalls-SR10</spring.data.releasetrain.version>
         <mockito.core.version>2.8.9</mockito.core.version>
         <org.apache.tinkerpop.gremlin.driver.version>3.2.4</org.apache.tinkerpop.gremlin.driver.version>
         <org.projectlombok.version>1.16.18</org.projectlombok.version>
@@ -40,7 +41,14 @@
             </exclusions>
         </dependency>
 
-        <!-- Apache Tinkerpop Gremlin -->
+        <!-- Spring Data Commons -->
+        <dependency>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <version>${spring.data.version}</version>
+        </dependency>
+
+        <!-- Apache Tinkerpop Gremlin Driver -->
         <dependency>
             <groupId>org.apache.tinkerpop</groupId>
             <artifactId>gremlin-driver</artifactId>
@@ -75,8 +83,19 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${org.projectlombok.version}</version>
-            <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot</artifactId>
+            <version>2.0.0.RELEASE</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -115,6 +134,20 @@
                     <linkXRef>false</linkXRef>
                 </configuration>
                 <inherited>true</inherited>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.2.1</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
 
             <plugin>
