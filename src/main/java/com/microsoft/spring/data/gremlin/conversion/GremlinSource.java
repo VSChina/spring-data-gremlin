@@ -15,42 +15,36 @@ import java.util.Map;
  */
 public interface GremlinSource {
     /**
-     * Set the id (String) of domain
-     *
-     * @return never
+     * Set the id of domain
      */
     void setId(String id);
 
     /**
-     * Set the label (String) of domain
-     *
-     * @return never
+     * Set the label of domain
      */
     void setLabel(String label);
 
     /**
-     * Set the property map (String) of domain
-     *
-     * @return never
+     * Set the property map of domain
      */
     void setProperty(String key, String value);
 
     /**
-     * Get the id (String) of domain
+     * Get the id of domain
      *
      * @return will never be null
      */
     String getId();
 
     /**
-     * Get the label (String) of domain
+     * Get the label of domain
      *
      * @return will never be null
      */
     String getLabel();
 
     /**
-     * Get the properties (Map) of domain
+     * Get the properties of domain
      *
      * @return will never be null
      */
