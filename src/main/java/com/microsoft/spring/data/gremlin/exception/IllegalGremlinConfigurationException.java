@@ -5,9 +5,15 @@
  */
 package com.microsoft.spring.data.gremlin.exception;
 
+import org.springframework.lang.Nullable;
+
 public class IllegalGremlinConfigurationException extends IllegalArgumentException {
 
     public IllegalGremlinConfigurationException(String msg) {
         super(msg);
+    }
+
+    public IllegalGremlinConfigurationException(@Nullable String msg, @Nullable Throwable cause) {
+        super(msg, cause);
     }
 }

@@ -45,7 +45,7 @@ public class GremlinFactory {
             cluster = Cluster.build(this.endpoint).serializer(Serializers.DEFAULT_RESULT_SERIALIZER)
                     .credentials(this.username, this.password).enableSsl(true).port(port).create();
         } catch (IllegalArgumentException e) {
-            throw new IllegalGremlinConfigurationException("Invalid configuration of Gremlin");
+            throw new IllegalGremlinConfigurationException("Invalid configuration of Gremlin", e);
         }
 
         return cluster;
