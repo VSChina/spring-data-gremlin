@@ -14,6 +14,6 @@ public class GremlinScriptTraversal implements GremlinScript<GraphTraversal> {
 
     @Override
     public GraphTraversal generateScript(GremlinSource gremlinSource) {
-        throw new NotImplementedException("GremlinSource");
+        throw new NotImplementedException("generate traversal script is not implemented");
     }
 }

@@ -13,6 +13,6 @@ public class GremlinScriptLiteral implements GremlinScript<String> {
 
     @Override
     public String generateScript(GremlinSource gremlinSource) {
-        throw new NotImplementedException("GremlinSource");
+        throw new NotImplementedException("generate literal script is not implemented");
     }
 }
