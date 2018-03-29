@@ -5,6 +5,7 @@
  */
 package com.microsoft.spring.data.gremlin.conversion;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.Setter;
@@ -14,14 +15,16 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class BaseGremlinSource implements GremlinSource {
+public class BasicGremlinSource implements GremlinSource {
 
     private String id;
     private String label;
     private Map<String, Object> properties;
+
+    @Setter(AccessLevel.PRIVATE)
     private GremlinScript script;
 
-    public BaseGremlinSource() {
+    public BasicGremlinSource() {
         this.id = null;
         this.label = null;
         this.properties = new HashMap<>();
@@ -29,10 +32,10 @@ public class BaseGremlinSource implements GremlinSource {
     }
 
     public void setGremlinScriptStrategy(@NonNull GremlinScript script) {
-        this.script = script;
+        this.setGremlinScriptStrategy(script);
     }
 
-    public Object doGremlinScript() {
+    public Object generateGremlinScript() {
         return this.script.generateScript(this);
     }
 
@@ -44,7 +47,6 @@ public class BaseGremlinSource implements GremlinSource {
     public void setProperty(String key, Object value) {
         if (this.hasProperty(key) && value == null) {
             this.properties.remove(key);
-            return;
         } else {
             this.properties.put(key, value);
         }
