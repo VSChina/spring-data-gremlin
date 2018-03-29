@@ -29,7 +29,8 @@ public abstract class GremlinScriptPropertiesLiteral {
             } else if (value instanceof Boolean) {
                 scriptList.add(String.format(Constants.GREMLIN_PRIMITIVE_PROPERTY_BOOLEAN, name, value));
             } else {
-                throw new NotImplementedException("unsupported property type from gremlin");
+                final String typeName = value.getClass().getName();
+                throw new NotImplementedException(String.format("unsupported type %s from gremlin", typeName));
             }
         }
     }
