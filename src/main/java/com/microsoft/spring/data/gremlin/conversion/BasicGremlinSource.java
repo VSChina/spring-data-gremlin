@@ -15,14 +15,14 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class BasicGremlinSource implements GremlinSource {
+public class BasicGremlinSource<T> implements GremlinSource {
 
     private String id;
     private String label;
     private Map<String, Object> properties;
 
     @Setter(AccessLevel.PRIVATE)
-    private GremlinScript script;
+    private GremlinScript<T> script;
 
     public BasicGremlinSource() {
         this.id = null;
@@ -35,7 +35,7 @@ public class BasicGremlinSource implements GremlinSource {
         this.setGremlinScriptStrategy(script);
     }
 
-    public Object generateGremlinScript() {
+    public T generateGremlinScript() {
         return this.script.generateScript(this);
     }
 
