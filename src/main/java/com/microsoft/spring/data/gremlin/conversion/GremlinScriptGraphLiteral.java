@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
 
 @NoArgsConstructor
-public class GremlinEdgeScriptLiteral implements GremlinScript<String> {
+public class GremlinScriptGraphLiteral implements GremlinScript<String> {
 
     @Override
     public String generateScript(GremlinSource gremlinSource) {
-        throw new NotImplementedException("generate literal Edge script is not implemented");
+        throw new NotImplementedException("generate literal graph script is not implemented");
     }
 }
