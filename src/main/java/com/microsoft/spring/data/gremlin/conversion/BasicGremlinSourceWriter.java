@@ -24,7 +24,7 @@ public class BasicGremlinSourceWriter {
         return entityInfo.getIdField().toString();
     }
 
-    protected void setReservedGremlinSource(GremlinSource source) {
+    protected void setGremlinSourceReserved(GremlinSource source) {
         Assert.notNull(source, "GremlinSource should not be null");
 
         source.setId(this.getPersistentEntityId());

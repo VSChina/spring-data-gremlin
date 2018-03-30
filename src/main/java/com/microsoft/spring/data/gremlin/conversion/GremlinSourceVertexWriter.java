@@ -22,13 +22,11 @@ public class GremlinSourceVertexWriter extends BasicGremlinSourceWriter implemen
 
     @Override
     public void write(Object domain, MappingGremlinConverter converter, GremlinSource source) {
-        Assert.isTrue(source instanceof GremlinSourceVertex, "should be the instance of GremlinSourceVertex");
-
-        if (domain == null || converter == null || source == null) {
-            return;
+        if (domain == null || converter == null || source == null || source instanceof GremlinSourceVertex) {
+            throw new IllegalArgumentException("Invalid argument of write method");
         }
 
-        super.setReservedGremlinSource(source);
+        super.setGremlinSourceReserved(source);
 
         final GremlinPersistentEntity<?> persistentEntity = converter.getPersistentEntity(domain.getClass());
         final ConvertingPropertyAccessor accessor = converter.getPropertyAccessor(domain);

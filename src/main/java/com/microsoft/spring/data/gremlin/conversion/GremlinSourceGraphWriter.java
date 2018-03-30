@@ -41,10 +41,8 @@ public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implement
     @Override
     @SuppressWarnings("unchecked")
     public void write(Object domain, MappingGremlinConverter converter, GremlinSource source) {
-        Assert.isTrue(source instanceof GremlinSourceGraph, "should be the instance of GremlinSourceGraph");
-
-        if (domain == null || converter == null || source == null) {
-            return;
+        if (domain == null || converter == null || source == null || source instanceof GremlinSourceGraph) {
+            throw new IllegalArgumentException("Invalid argument of write method");
         }
 
         source.setId(super.getPersistentEntityId());

@@ -25,18 +25,18 @@ public class GremlinSourceEdgeWriter extends BasicGremlinSourceWriter implements
     private String getPersistentEntityId(Object domain) {
         Assert.notNull(domain, "domain class should not be null");
 
-        return new BasicGremlinSourceWriter(domain).getPersistentEntityId();
+        final GremlinEntityInformation entityInformation = new GremlinEntityInformation(domain);
+
+        return entityInfo.getIdField().toString();
     }
 
     @Override
     public void write(Object domain, MappingGremlinConverter converter, GremlinSource source) {
-        Assert.isTrue(source instanceof GremlinSourceEdge, "should be the instance of GremlinSourceEdge");
-
-        if (domain == null || converter != null || source == null) {
-            return;
+        if (domain == null || converter == null || source == null || source instanceof GremlinSourceEdge) {
+            throw new IllegalArgumentException("Invalid argument of write method");
         }
 
-        super.setReservedGremlinSource(source);
+        super.setGremlinSourceReserved(source);
 
         GremlinSourceEdge sourceEdge = (GremlinSourceEdge) source;
         final GremlinPersistentEntity<?> persistentEntity = converter.getPersistentEntity(domain.getClass());
