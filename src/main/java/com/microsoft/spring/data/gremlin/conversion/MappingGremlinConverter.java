@@ -14,6 +14,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.data.convert.EntityConverter;
 import org.springframework.data.mapping.context.MappingContext;
+import org.springframework.lang.NonNull;
 
 public class MappingGremlinConverter
         implements EntityConverter<GremlinPersistentEntity<?>, GremlinPersistentProperty, Object, GremlinSource>,
@@ -50,20 +51,12 @@ public class MappingGremlinConverter
     }
 
     @Override
-    public <R extends Object> R read(Class<R> type, GremlinSource source) {
-        if (source == null) {
-            return null;
-        }
-
+    public <R extends Object> R read(Class<R> type, @NonNull GremlinSource source) {
         throw new NotImplementedException("read method of MappingGremlinConverter not implemented yet");
     }
 
     @Override
-    public void write(Object domain, GremlinSource source) {
-        if (domain == null || source == null) {
-            return;
-        }
-
+    public void write(@NonNull Object domain, @NonNull GremlinSource source) {
         throw new NotImplementedException("write method of MappingGremlinConverter not implemented yet");
     }
 }
