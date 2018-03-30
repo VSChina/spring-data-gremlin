@@ -5,25 +5,25 @@
  */
 package com.microsoft.spring.data.gremlin.common;
 
-import com.microsoft.spring.data.gremlin.exception.IllegalGremlinConfigurationException;
+import com.microsoft.spring.data.gremlin.exception.GremlinIllegalConfigurationException;
 import org.apache.tinkerpop.gremlin.driver.Client;
 import org.junit.Test;
 import org.springframework.util.Assert;
 
 public class GremlinFactoryUnitTest {
 
-    @Test
-    public void testGremlinFactory () {
-        GremlinFactory factory;
-        Client client;
+    @Test(expected = GremlinIllegalConfigurationException.class)
+    public void testGremlinFactoryException() {
+        GremlinFactory factory = new GremlinFactory(TestConstants.FAKE_ENDPOINT, null,
+                TestConstants.FAKE_USERNAME, TestConstants.FAKE_PASSWORD);
 
-        try {
-            factory = new GremlinFactory(TestConstants.FAKE_ENDPOINT, null,
-                    TestConstants.FAKE_USERNAME, TestConstants.FAKE_PASSWORD);
-            client = factory.getGremlinClient();
-        } catch (Exception e) {
-            Assert.isTrue(e instanceof IllegalGremlinConfigurationException, "should export illegal exception");
-        }
+        factory.getGremlinClient();
+    }
+
+    @Test
+    public void testGremlinFactoryNormal() {
+        Client client;
+        GremlinFactory factory;
 
         factory = new GremlinFactory(TestConstants.EMPTY_STRING, TestConstants.EMPTY_STRING,
                 TestConstants.EMPTY_STRING, TestConstants.EMPTY_STRING);
