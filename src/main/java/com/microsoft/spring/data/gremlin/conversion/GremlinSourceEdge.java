@@ -20,8 +20,5 @@ public class GremlinSourceEdge extends BasicGremlinSource<String> {
 
     public GremlinSourceEdge() {
         super();
-
-        this.vertexIdFrom = null;
-        this.vertexIdTo = null;
     }
 }

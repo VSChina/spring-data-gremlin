@@ -28,10 +28,7 @@ public class BasicGremlinSource<T> implements GremlinSource {
     private GremlinSourceWriter writer;
 
     public BasicGremlinSource() {
-        this.id = null;
-        this.label = null;
         this.properties = new HashMap<>();
-        this.script = null;
     }
 
     public void setGremlinScriptStrategy(@NonNull GremlinScript script) {
