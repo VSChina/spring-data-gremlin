@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
 
 @NoArgsConstructor
-public class GremlinEdgeScriptLiteral implements GremlinScript<String> {
+public class GremlinScriptEdgeLiteral implements GremlinScript<String> {
 
     @Override
     public String generateScript(GremlinSource gremlinSource) {
