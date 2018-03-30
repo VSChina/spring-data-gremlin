@@ -24,6 +24,9 @@ public class BasicGremlinSource<T> implements GremlinSource {
     @Setter(AccessLevel.PRIVATE)
     private GremlinScript<T> script;
 
+    @Setter(AccessLevel.PRIVATE)
+    private GremlinSourceWriter writer;
+
     public BasicGremlinSource() {
         this.id = null;
         this.label = null;
@@ -35,8 +38,16 @@ public class BasicGremlinSource<T> implements GremlinSource {
         this.setGremlinScriptStrategy(script);
     }
 
+    public void setGremlinSourceWriter(@NonNull GremlinSourceWriter writer) {
+        this.setWriter(writer);
+    }
+
     public T generateGremlinScript() {
         return this.script.generateScript(this);
+    }
+
+    public void doGremlinSourceWrite(Object domain) {
+        this.writer.writeEnityToGremlinSource(domain.getClass(), this);
     }
 
     private boolean hasProperty(String key) {
