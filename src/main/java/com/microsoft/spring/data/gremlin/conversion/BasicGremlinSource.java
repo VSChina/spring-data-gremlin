@@ -35,7 +35,7 @@ public class BasicGremlinSource<T> implements GremlinSource {
     }
 
     public void setGremlinScriptStrategy(@NonNull GremlinScript script) {
-        this.setGremlinScriptStrategy(script);
+        this.setScript(script);
     }
 
     public void setGremlinSourceWriter(@NonNull GremlinSourceWriter writer) {
