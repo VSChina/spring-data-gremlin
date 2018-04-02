@@ -19,6 +19,10 @@ public class GremlinScriptVertexLiteral extends GremlinScriptPropertiesLiteral i
 
     @Override
     public String generateScript(@NonNull GremlinSource source) {
+        if (source instanceof GremlinSourceVertex) {
+            throw new IllegalStateException("should be the instance of GremlinSourceVertex");
+        }
+
         final List<String> scriptList = new ArrayList<>();
         final String label = source.getLabel();
         final String id = source.getId();
@@ -27,7 +31,6 @@ public class GremlinScriptVertexLiteral extends GremlinScriptPropertiesLiteral i
         Assert.notNull(label, "label should not be null");
         Assert.notNull(id, "id should not be null");
         Assert.notNull(properties, "properties should not be null");
-        Assert.isTrue(source instanceof GremlinSourceVertex, "should be vertex extend from GremlinSource");
 
         scriptList.add(Constants.GREMLIN_PRIMITIVE_GRAPH);
 

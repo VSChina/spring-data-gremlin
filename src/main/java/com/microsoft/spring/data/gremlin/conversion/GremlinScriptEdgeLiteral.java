@@ -19,6 +19,10 @@ public class GremlinScriptEdgeLiteral extends GremlinScriptPropertiesLiteral imp
 
     @Override
     public String generateScript(@NonNull GremlinSource source) {
+        if (source instanceof GremlinSourceEdge) {
+            throw new IllegalStateException("should be the instance of GremlinSourceEdge");
+        }
+
         final List<String> scriptList = new ArrayList<>();
         final String label = source.getLabel();
         final String id = source.getId();
@@ -27,7 +31,6 @@ public class GremlinScriptEdgeLiteral extends GremlinScriptPropertiesLiteral imp
         Assert.notNull(label, "label should not be null");
         Assert.notNull(id, "id should not be null");
         Assert.notNull(properties, "properties should not be null");
-        Assert.isTrue(source instanceof GremlinSourceEdge, "should be edge extend from GremlinSource");
 
         final GremlinSourceEdge sourceEdge = (GremlinSourceEdge) source;
         final String vertexIdFrom = sourceEdge.getVertexIdFrom();

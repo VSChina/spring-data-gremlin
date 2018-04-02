@@ -8,7 +8,6 @@ package com.microsoft.spring.data.gremlin.conversion;
 import com.microsoft.spring.data.gremlin.common.Constants;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
-import org.springframework.util.Assert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +21,9 @@ public class GremlinScriptGraphLiteral implements GremlinScript<String> {
 
     @Override
     public String generateScript(@NonNull GremlinSource source) {
-        Assert.isTrue(source instanceof GremlinSourceGraph, "should be Graph extend from GremlinSource");
+        if (source instanceof GremlinSourceGraph) {
+            throw new IllegalStateException("should be the instance of GremlinSourceGraph");
+        }
 
         final List<String> scriptList = new ArrayList<>();
         final GremlinSourceGraph sourceGraph = (GremlinSourceGraph) source;
