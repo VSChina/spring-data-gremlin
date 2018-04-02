@@ -6,6 +6,7 @@
 package com.microsoft.spring.data.gremlin.conversion;
 
 import com.microsoft.spring.data.gremlin.common.Constants;
+import com.microsoft.spring.data.gremlin.exception.UnexpectedGremlinSourceTypeException;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
@@ -22,7 +23,7 @@ public class GremlinScriptGraphLiteral implements GremlinScript<String> {
     @Override
     public String generateScript(@NonNull GremlinSource source) {
         if (source instanceof GremlinSourceGraph) {
-            throw new IllegalStateException("should be the instance of GremlinSourceGraph");
+            throw new UnexpectedGremlinSourceTypeException("should be the instance of GremlinSourceGraph");
         }
 
         final List<String> scriptList = new ArrayList<>();

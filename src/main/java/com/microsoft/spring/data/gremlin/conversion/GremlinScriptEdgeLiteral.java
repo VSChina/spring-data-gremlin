@@ -6,6 +6,7 @@
 package com.microsoft.spring.data.gremlin.conversion;
 
 import com.microsoft.spring.data.gremlin.common.Constants;
+import com.microsoft.spring.data.gremlin.exception.UnexpectedGremlinSourceTypeException;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import org.springframework.util.Assert;
@@ -20,7 +21,7 @@ public class GremlinScriptEdgeLiteral extends GremlinScriptPropertiesLiteral imp
     @Override
     public String generateScript(@NonNull GremlinSource source) {
         if (source instanceof GremlinSourceEdge) {
-            throw new IllegalStateException("should be the instance of GremlinSourceEdge");
+            throw new UnexpectedGremlinSourceTypeException("should be the instance of GremlinSourceEdge");
         }
 
         final List<String> scriptList = new ArrayList<>();

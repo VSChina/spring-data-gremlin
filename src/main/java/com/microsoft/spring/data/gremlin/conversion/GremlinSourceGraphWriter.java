@@ -8,6 +8,7 @@ package com.microsoft.spring.data.gremlin.conversion;
 import com.microsoft.spring.data.gremlin.annotation.EdgeSet;
 import com.microsoft.spring.data.gremlin.annotation.VertexSet;
 import com.microsoft.spring.data.gremlin.mapping.GremlinPersistentEntity;
+import com.microsoft.spring.data.gremlin.repository.support.GremlinEntityInformation;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.model.ConvertingPropertyAccessor;
 import org.springframework.lang.NonNull;
@@ -18,16 +19,17 @@ import java.util.List;
 
 public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implements GremlinSourceWriter {
 
-    public GremlinSourceGraphWriter(@NonNull Object domain) {
-        super(domain);
+    public GremlinSourceGraphWriter(@NonNull Class<?> domainClass) {
+        super(domainClass);
     }
 
+    @SuppressWarnings("unchecked")
     private void writeGraphSet(@NonNull List<Object> objectList, @NonNull MappingGremlinConverter mappingConverter,
                                @NonNull GremlinSourceGraph sourceGraph) {
         Assert.isInstanceOf(GremlinSourceGraph.class, sourceGraph, "should be instance of GremlinSourceGraph ");
 
         for (final Object object : objectList) {
-            final GremlinEntityInformation information = new GremlinEntityInformation(object);
+            final GremlinEntityInformation information = new GremlinEntityInformation(object.getClass());
             final GremlinSource source = information.getGremlinSource();
 
             source.doGremlinSourceWrite(object, mappingConverter);
@@ -60,3 +62,4 @@ public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implement
         }
     }
 }
+

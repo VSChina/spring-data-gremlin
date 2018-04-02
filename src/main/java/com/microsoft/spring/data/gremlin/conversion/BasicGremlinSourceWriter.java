@@ -5,22 +5,23 @@
  */
 package com.microsoft.spring.data.gremlin.conversion;
 
+import com.microsoft.spring.data.gremlin.repository.support.GremlinEntityInformation;
 import org.springframework.lang.NonNull;
 
 public class BasicGremlinSourceWriter {
 
     private GremlinEntityInformation entityInformation;
 
-    public BasicGremlinSourceWriter(@NonNull Object domain) {
-        this.entityInformation = new GremlinEntityInformation(domain);
+    public BasicGremlinSourceWriter(@NonNull Class<?> domainClass) {
+        this.entityInformation = new GremlinEntityInformation(domainClass);
     }
 
     protected String getPersistentEntityId() {
-        return entityInfo.getIdField().toString();
+        return this.entityInformation.getIdField().toString();
     }
 
     private String getPersistentEntityLabel() {
-        return entityInfo.getIdField().toString();
+        return this.entityInformation.getIdField().toString();
     }
 
     protected void setGremlinSourceReserved(@NonNull GremlinSource source) {
@@ -29,3 +30,4 @@ public class BasicGremlinSourceWriter {
         source.setLabel(this.getPersistentEntityLabel());
     }
 }
+
