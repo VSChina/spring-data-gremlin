@@ -27,8 +27,10 @@ public class GremlinScriptVertexLiteral extends GremlinScriptPropertiesLiteral i
         Assert.notNull(label, "label should not be null");
         Assert.notNull(id, "id should not be null");
         Assert.notNull(properties, "properties should not be null");
+        Assert.isTrue(source instanceof GremlinSourceVertex, "should be vertex extend from GremlinSource");
 
         scriptList.add(Constants.GREMLIN_PRIMITIVE_GRAPH);
+
         scriptList.add(String.format(Constants.GREMLIN_PRIMITIVE_ADD_VERTEX, label));
         scriptList.add(String.format(Constants.GREMLIN_PRIMITIVE_PROPERTY_STRING, Constants.PROPERTY_ID, id));
 
