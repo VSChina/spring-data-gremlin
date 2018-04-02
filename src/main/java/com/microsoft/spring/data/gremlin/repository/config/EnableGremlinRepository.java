@@ -51,16 +51,6 @@ public @interface EnableGremlinRepository {
     String repositoryImplementationPostFix() default Constants.DEFAULT_REPOSITORY_IMPLEMENT_POSTFIX;
 
     /**
-     * Configures where to find the Spring Data named Queries properties file.
-     */
-    String namedQueriesLocation() default Constants.DEFAULT_NAMED_QUERIES_LOCATION;
-
-    /**
-     * Specifies the key for lookup strategy.
-     */
-    QueryLookupStrategy.Key queryLookupStragtegy() default QueryLookupStrategy.Key.CREATE_IF_NOT_FOUND;
-
-    /**
      * Configures the repository base class to be used to create repository.
      */
     Class<?> repositoryBaseClass() default DefaultRepositoryBaseClass.class;
