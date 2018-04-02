@@ -22,9 +22,7 @@ public class GremlinSourceEdgeWriter extends BasicGremlinSourceWriter implements
         super(domain);
     }
 
-    private String getPersistentEntityId(Object domain) {
-        Assert.notNull(domain, "domain class should not be null");
-
+    private String getPersistentEntityId(@NonNull Object domain) {
         final GremlinEntityInformation entityInformation = new GremlinEntityInformation(domain);
 
         return entityInfo.getIdField().toString();

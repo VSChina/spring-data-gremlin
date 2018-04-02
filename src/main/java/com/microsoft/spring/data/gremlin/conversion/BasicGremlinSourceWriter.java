@@ -6,7 +6,6 @@
 package com.microsoft.spring.data.gremlin.conversion;
 
 import org.springframework.lang.NonNull;
-import org.springframework.util.Assert;
 
 public class BasicGremlinSourceWriter {
 
@@ -24,8 +23,7 @@ public class BasicGremlinSourceWriter {
         return entityInfo.getIdField().toString();
     }
 
-    protected void setGremlinSourceReserved(GremlinSource source) {
-        Assert.notNull(source, "GremlinSource should not be null");
+    protected void setGremlinSourceReserved(@NonNull GremlinSource source) {
 
         source.setId(this.getPersistentEntityId());
         source.setLabel(this.getPersistentEntityLabel());

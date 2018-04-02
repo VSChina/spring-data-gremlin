@@ -22,12 +22,9 @@ public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implement
         super(domain);
     }
 
-    private void writeGraphSet(final Field field, List<Object> objectList,
-                               MappingGremlinConverter mappingConverter, GremlinSourceGraph sourceGraph) {
-        Assert.notNull(field, "field should not be null");
-        Assert.notNull(objectList, "GremlinSourcGraph should not be null");
-        Assert.notNull(mappingConverter, "GremlinSourcGraph should not be null");
-        Assert.notNull(sourceGraph, "GremlinSourcGraph should not be null");
+    private void writeGraphSet(@NonNull List<Object> objectList, @NonNull MappingGremlinConverter mappingConverter,
+                               @NonNull GremlinSourceGraph sourceGraph) {
+        Assert.isInstanceOf(GremlinSourceGraph.class, sourceGraph, "should be instance of GremlinSourceGraph ");
 
         for (final Object object : objectList) {
             final GremlinEntityInformation information = new GremlinEntityInformation(object);
@@ -58,7 +55,7 @@ public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implement
 
             if (field.getAnnotatedType().getType() == VertexSet.class
                 || field.getAnnotatedType().getType() == EdgeSet.class) {
-                this.writeGraphSet(field, objectList, converter, sourceGraph);
+                this.writeGraphSet(objectList, converter, sourceGraph);
             }
         }
     }

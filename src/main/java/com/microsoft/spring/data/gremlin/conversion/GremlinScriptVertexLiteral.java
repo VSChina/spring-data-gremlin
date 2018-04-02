@@ -7,6 +7,7 @@ package com.microsoft.spring.data.gremlin.conversion;
 
 import com.microsoft.spring.data.gremlin.common.Constants;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.util.Assert;
 
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ import java.util.Map;
 public class GremlinScriptVertexLiteral extends GremlinScriptPropertiesLiteral implements GremlinScript<String> {
 
     @Override
-    public String generateScript(GremlinSource source) {
+    public String generateScript(@NonNull GremlinSource source) {
         final List<String> scriptList = new ArrayList<>();
         final String label = source.getLabel();
         final String id = source.getId();
