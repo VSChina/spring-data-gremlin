@@ -8,8 +8,8 @@ package com.microsoft.spring.data.gremlin.conversion;
 import com.microsoft.spring.data.gremlin.common.Constants;
 import com.microsoft.spring.data.gremlin.exception.UnexpectedGremlinSourceTypeException;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import org.springframework.util.Assert;
+import org.springframework.lang.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
