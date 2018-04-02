@@ -57,7 +57,7 @@ public class MappingGremlinConverter
 
     @Override
     public void write(@NonNull Object domain, @NonNull GremlinSource source) {
-        throw new NotImplementedException("write method of MappingGremlinConverter not implemented yet");
+        source.doGremlinSourceWrite(domain, this);
     }
 }
 
