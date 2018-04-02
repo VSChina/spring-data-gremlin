@@ -10,7 +10,8 @@ import com.microsoft.spring.data.gremlin.annotation.Graph;
 import com.microsoft.spring.data.gremlin.annotation.Vertex;
 import com.microsoft.spring.data.gremlin.common.Constants;
 import com.microsoft.spring.data.gremlin.common.GremlinEntityType;
-import com.microsoft.spring.data.gremlin.exception.GremlinEntityInformationException;
+import com.microsoft.spring.data.gremlin.exception.InvalidGremlinEntityIdFieldException;
+import com.microsoft.spring.data.gremlin.exception.UnexpectedGremlinEntityTypeException;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.core.support.AbstractEntityInformation;
@@ -74,13 +75,13 @@ public class GremlinEntityInformation<T, ID> extends AbstractEntityInformation<T
         } else if (fields.size() == 1) {
             idField = fields.get(0);
         } else {
-            throw new GremlinEntityInformationException("only one @Id field is allowed")
+            throw new InvalidGremlinEntityIdFieldException("only one @Id field is allowed");
         }
 
         if (idField == null) {
-            throw new GremlinEntityInformationException("no field named id in class");
+            throw new InvalidGremlinEntityIdFieldException("no field named id in class");
         } else if (idField.getType() != String.class) {
-            throw new GremlinEntityInformationException("the type of @Id/id field should be String");
+            throw new InvalidGremlinEntityIdFieldException("the type of @Id/id field should be String");
         }
 
         return idField;
@@ -105,7 +106,7 @@ public class GremlinEntityInformation<T, ID> extends AbstractEntityInformation<T
             return GremlinEntityType.GRAPH;
         }
 
-        throw new GremlinEntityInformationException("cannot not to identify gremlin entity type");
+        throw new UnexpectedGremlinEntityTypeException("cannot not to identify gremlin entity type");
     }
 
     private String getEntityLabel(Class<?> domainClass) {
@@ -136,7 +137,7 @@ public class GremlinEntityInformation<T, ID> extends AbstractEntityInformation<T
             case UNKNOWN:
                 // fallthrough
             default:
-                throw new GremlinEntityInformationException("Unexpected gremlin entity type");
+                throw new UnexpectedGremlinEntityTypeException("Unexpected gremlin entity type");
         }
 
         return label;
