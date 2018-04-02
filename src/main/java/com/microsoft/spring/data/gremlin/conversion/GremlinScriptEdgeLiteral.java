@@ -48,4 +48,3 @@ public class GremlinScriptEdgeLiteral extends GremlinScriptPropertiesLiteral imp
         return String.join(Constants.GREMLIN_PRIMITIVE_INVOKE, scriptList);
     }
 }
-
