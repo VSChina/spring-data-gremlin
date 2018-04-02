@@ -17,7 +17,7 @@ import java.util.List;
 public class GremlinScriptGraphLiteral implements GremlinScript<String> {
 
     private String trimScriptHead(@NonNull String script) {
-        return script.replace(Constants.GREMLIN_SCRIPT_HEAD, "") ;
+        return script.replaceFirst(Constants.GREMLIN_SCRIPT_HEAD, "") ;
     }
 
     @Override
