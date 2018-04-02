@@ -19,8 +19,8 @@ import java.util.List;
 
 public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implements GremlinSourceWriter {
 
-    public GremlinSourceGraphWriter(@NonNull Class<?> domainClass) {
-        super(domainClass);
+    public GremlinSourceGraphWriter(@NonNull Field idField, @NonNull String label) {
+        super(idField, label);
     }
 
     @SuppressWarnings("unchecked")
@@ -40,14 +40,12 @@ public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implement
     @Override
     @SuppressWarnings("unchecked")
     public void write(Object domain, MappingGremlinConverter converter, GremlinSource source) {
-        if (domain == null || converter == null || source == null || source instanceof GremlinSourceGraph) {
+        if (domain == null || converter == null || source == null || !(source instanceof GremlinSourceGraph)) {
             throw new IllegalArgumentException("Invalid argument of write method");
         }
 
-        source.setId(super.getPersistentEntityId());
-
         final GremlinSourceGraph sourceGraph = (GremlinSourceGraph) source;
-        final GremlinPersistentEntity<?> persistentEntity = converter.getPersistentEntity(domain.getClass());
+        final GremlinPersistentEntity<?> persistentEntity = converter.getPersistentEntity(domain);
         final ConvertingPropertyAccessor accessor = converter.getPropertyAccessor(domain);
 
         for (final Field field : domain.getClass().getDeclaredFields()) {
@@ -55,8 +53,7 @@ public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implement
             Assert.notNull(property, "persistence property should not be null");
             final List<Object> objectList = (List<Object>) accessor.getProperty(property);
 
-            if (field.getAnnotatedType().getType() == VertexSet.class
-                || field.getAnnotatedType().getType() == EdgeSet.class) {
+            if (field.getAnnotation(VertexSet.class) != null || field.getAnnotation(EdgeSet.class) != null) {
                 this.writeGraphSet(objectList, converter, sourceGraph);
             }
         }
