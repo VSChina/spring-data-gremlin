@@ -13,7 +13,7 @@ import java.rmi.UnexpectedException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GremlinSourceGraph extends BasicGremlinSource<String> {
+public class GremlinSourceGraph extends BasicGremlinSource {
 
     @Getter
     @Setter
