@@ -6,6 +6,7 @@
 package com.microsoft.spring.data.gremlin.conversion;
 
 import com.microsoft.spring.data.gremlin.common.Constants;
+import com.microsoft.spring.data.gremlin.exception.UnexpectedGremlinSourceTypeException;
 import com.microsoft.spring.data.gremlin.mapping.GremlinPersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.model.ConvertingPropertyAccessor;
@@ -22,8 +23,8 @@ public class GremlinSourceVertexWriter extends BasicGremlinSourceWriter implemen
 
     @Override
     public void write(Object domain, MappingGremlinConverter converter, GremlinSource source) {
-        if (domain == null || converter == null || source == null || !(source instanceof GremlinSourceVertex)) {
-            throw new IllegalArgumentException("Invalid argument of write method");
+        if (!(source instanceof GremlinSourceVertex)) {
+            throw new UnexpectedGremlinSourceTypeException("should be the instance of GremlinSourceVertex");
         }
 
         source.setId(super.getEntityIdValue(domain, converter));
