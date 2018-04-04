@@ -6,9 +6,11 @@
 package com.microsoft.spring.data.gremlin.conversion;
 
 import com.microsoft.spring.data.gremlin.common.Constants;
+import com.microsoft.spring.data.gremlin.common.GremlinUtils;
 import com.microsoft.spring.data.gremlin.exception.UnexpectedGremlinSourceTypeException;
 import com.microsoft.spring.data.gremlin.mapping.GremlinPersistentEntity;
 import com.sun.istack.internal.NotNull;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.model.ConvertingPropertyAccessor;
@@ -16,11 +18,9 @@ import org.springframework.util.Assert;
 
 import java.lang.reflect.Field;
 
-public class GremlinSourceVertexReader extends BasicGremlinSourceReader implements GremlinSourceReader {
+@NoArgsConstructor
+public class GremlinSourceVertexReader implements GremlinSourceReader {
 
-    public GremlinSourceVertexReader() {
-        super();
-    }
 
     @Override
     public <T extends Object> T read(@NotNull Class<T> type, @NotNull MappingGremlinConverter converter,
@@ -29,7 +29,7 @@ public class GremlinSourceVertexReader extends BasicGremlinSourceReader implemen
             throw new UnexpectedGremlinSourceTypeException("should be instance of GremlinSourceVertex");
         }
 
-        final T domain = super.createDomainInstance(type);
+        final T domain = GremlinUtils.createInstance(type);
 
         final ConvertingPropertyAccessor accessor = converter.getPropertyAccessor(domain);
         final GremlinPersistentEntity persistentEntity = converter.getPersistentEntity(type);
@@ -49,3 +49,4 @@ public class GremlinSourceVertexReader extends BasicGremlinSourceReader implemen
         return domain;
     }
 }
+
