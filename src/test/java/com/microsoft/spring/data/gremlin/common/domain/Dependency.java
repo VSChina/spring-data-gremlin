@@ -16,13 +16,13 @@ import lombok.Data;
 @AllArgsConstructor
 public class Dependency {
 
-    String id;
+    private String id;
 
-    String type;
+    private String type;
 
     @EdgeFrom
-    Library source;
+    private Library source;
 
     @EdgeTo
-    Library target;
+    private Library target;
 }

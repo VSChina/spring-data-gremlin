@@ -14,7 +14,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Library {
 
-    String id;
+    private String id;
 
-    String name;
+    private String name;
 }
