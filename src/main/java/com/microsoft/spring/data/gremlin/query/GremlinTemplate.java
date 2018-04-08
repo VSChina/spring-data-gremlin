@@ -10,10 +10,14 @@ import com.microsoft.spring.data.gremlin.conversion.*;
 import com.microsoft.spring.data.gremlin.exception.GremlinInsertionException;
 import com.microsoft.spring.data.gremlin.repository.support.GremlinEntityInformation;
 import org.apache.tinkerpop.gremlin.driver.Client;
+import org.apache.tinkerpop.gremlin.driver.Result;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.lang.NonNull;
+import org.springframework.util.Assert;
+
+import java.util.List;
 
 
 public class GremlinTemplate implements GremlinOperations, ApplicationContextAware {
@@ -46,7 +50,7 @@ public class GremlinTemplate implements GremlinOperations, ApplicationContextAwa
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T> T insert(T object) {
+    public <T> T insert(@NonNull T object) {
         final Client client = this.gremlinFactory.getGremlinClient();
         final GremlinEntityInformation information = new GremlinEntityInformation(object.getClass());
         final GremlinSource source = information.getGremlinSource();
@@ -62,5 +66,26 @@ public class GremlinTemplate implements GremlinOperations, ApplicationContextAwa
         }
 
         return object;
+    }
+
+    @Override
+    public <T> T findVertexById(@NonNull Object id, @NonNull Class<T> domainClass) {
+        final Client client = this.gremlinFactory.getGremlinClient();
+        final String idValue = id.toString();
+        final GremlinSource source = new GremlinSourceVertex(idValue, new GremlinResultVertexReader());
+        final GremlinScript<String> script = new GremlinScriptVertexFindByIdLiteral();
+        final List<Result> results;
+
+        try {
+            results = client.submit(script.generateScript(source)).all().join();
+        } catch (RuntimeException e) {
+            return null; // If cannot find the vertex by Id, ignore exception and return null
+        }
+
+        Assert.isTrue(results.size() == 1, "should be only 1 one vertex with given id");
+
+        source.doGremlinResultRead(results.get(0));
+
+        return this.mappingConverter.read(domainClass, source);
     }
 }
