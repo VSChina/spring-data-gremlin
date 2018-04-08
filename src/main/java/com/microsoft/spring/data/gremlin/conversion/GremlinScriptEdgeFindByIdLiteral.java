@@ -14,13 +14,16 @@ import org.springframework.util.Assert;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Provide generateScript findById from GremlinSourceEdge.
+ */
 @NoArgsConstructor
-public class GremlinScriptVertexFindLiteral implements GremlinScript<String> {
+public class GremlinScriptEdgeFindByIdLiteral implements GremlinScript<String> {
 
     @Override
     public String generateScript(@NonNull GremlinSource source) {
-        if (!(source instanceof GremlinSourceVertex)) {
-            throw new UnexpectedGremlinSourceTypeException("should be the instance of GremlinSourceVertex");
+        if (!(source instanceof GremlinSourceEdge)) {
+            throw new UnexpectedGremlinSourceTypeException("should be the instance of GremlinSourceEdge");
         }
 
         final List<String> scriptList = new ArrayList<>();
@@ -29,7 +32,7 @@ public class GremlinScriptVertexFindLiteral implements GremlinScript<String> {
         Assert.notNull(id, "id should not be null");
 
         scriptList.add(Constants.GREMLIN_PRIMITIVE_GRAPH);
-        scriptList.add(String.format(Constants.GREMLIN_PRIMITIVE_VERTEX, id));
+        scriptList.add(String.format(Constants.GREMLIN_PRIMITIVE_EDGE, id));
 
         return String.join(Constants.GREMLIN_PRIMITIVE_INVOKE, scriptList);
     }
