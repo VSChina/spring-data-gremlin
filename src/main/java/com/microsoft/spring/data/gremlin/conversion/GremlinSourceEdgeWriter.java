@@ -8,6 +8,7 @@ package com.microsoft.spring.data.gremlin.conversion;
 import com.microsoft.spring.data.gremlin.annotation.EdgeFrom;
 import com.microsoft.spring.data.gremlin.annotation.EdgeTo;
 import com.microsoft.spring.data.gremlin.common.Constants;
+import com.microsoft.spring.data.gremlin.exception.UnexpectedGremlinSourceTypeException;
 import com.microsoft.spring.data.gremlin.mapping.GremlinPersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.model.ConvertingPropertyAccessor;
@@ -18,28 +19,21 @@ import java.lang.reflect.Field;
 
 public class GremlinSourceEdgeWriter extends BasicGremlinSourceWriter implements GremlinSourceWriter {
 
-    public GremlinSourceEdgeWriter(@NonNull Object domain) {
-        super(domain);
-    }
-
-    private String getPersistentEntityId(Object domain) {
-        Assert.notNull(domain, "domain class should not be null");
-
-        final GremlinEntityInformation entityInformation = new GremlinEntityInformation(domain);
-
-        return entityInfo.getIdField().toString();
+    public GremlinSourceEdgeWriter(@NonNull Field idField, @NonNull String label) {
+        super(idField, label);
     }
 
     @Override
     public void write(Object domain, MappingGremlinConverter converter, GremlinSource source) {
-        if (domain == null || converter == null || source == null || source instanceof GremlinSourceEdge) {
-            throw new IllegalArgumentException("Invalid argument of write method");
+        if (!(source instanceof GremlinSourceEdge)) {
+            throw new UnexpectedGremlinSourceTypeException("should be the instance of GremlinSourceEdge");
         }
 
-        super.setGremlinSourceReserved(source);
+        source.setId(super.getEntityIdValue(domain, converter));
+        source.setLabel(super.getEntityLabel());
 
-        GremlinSourceEdge sourceEdge = (GremlinSourceEdge) source;
-        final GremlinPersistentEntity<?> persistentEntity = converter.getPersistentEntity(domain.getClass());
+        final GremlinSourceEdge sourceEdge = (GremlinSourceEdge) source;
+        final GremlinPersistentEntity<?> persistentEntity = converter.getPersistentEntity(domain);
         final ConvertingPropertyAccessor accessor = converter.getPropertyAccessor(domain);
 
         for (final Field field : domain.getClass().getDeclaredFields()) {
@@ -50,11 +44,11 @@ public class GremlinSourceEdgeWriter extends BasicGremlinSourceWriter implements
 
             if (field.getName().equals(Constants.PROPERTY_ID)) {
                 continue;
-            } else if (field.getAnnotatedType().getType() == EdgeFrom.class) {
-                sourceEdge.setVertexIdFrom(this.getPersistentEntityId(object));
+            } else if (field.getAnnotation(EdgeFrom.class) != null) {
+                sourceEdge.setVertexIdFrom(super.getEntityIdValue(object, converter));
                 continue;
-            } else if (field.getAnnotatedType().getType() == EdgeTo.class) {
-                sourceEdge.setVertexIdTo(this.getPersistentEntityId(object));
+            } else if (field.getAnnotation(EdgeTo.class) != null) {
+                sourceEdge.setVertexIdTo(super.getEntityIdValue(object, converter));
                 continue;
             }
 
@@ -62,3 +56,4 @@ public class GremlinSourceEdgeWriter extends BasicGremlinSourceWriter implements
         }
     }
 }
+

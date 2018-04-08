@@ -5,6 +5,8 @@
  */
 package com.microsoft.spring.data.gremlin.conversion;
 
+import org.apache.tinkerpop.gremlin.driver.Result;
+
 import java.util.Map;
 
 /**
@@ -49,4 +51,34 @@ public interface GremlinSource {
      * @return will never be null
      */
     Map<String, Object> getProperties();
+
+    /**
+     * do the real write from domain to GremlinSource
+     */
+    void doGremlinSourceWrite(Object domain, MappingGremlinConverter converter);
+
+    /**
+     * return the GremlinScript
+     */
+    GremlinScript<String> getGremlinScriptLiteral();
+
+    /**
+     * Set the script Strategy of GremlinSource
+     */
+    void setGremlinScriptStrategy(GremlinScript script);
+
+    /**
+     * Set the SourceWriter of GremlinSource
+     */
+    void setGremlinSourceWriter(GremlinSourceWriter writer);
+
+    /**
+     * Set the ResultReader for reading data from Gremlin Result to GremlinSource
+     */
+    void setGremlinResultReader(GremlinResultReader reader);
+
+    /**
+     * do the real reading from Result to GremlinSource
+     */
+    void doGremlinResultRead(Result result);
 }

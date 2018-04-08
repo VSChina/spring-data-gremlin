@@ -12,9 +12,11 @@ import com.microsoft.spring.data.gremlin.common.Constants;
 import com.microsoft.spring.data.gremlin.common.GremlinEntityType;
 import com.microsoft.spring.data.gremlin.exception.InvalidGremlinEntityIdFieldException;
 import com.microsoft.spring.data.gremlin.exception.UnexpectedGremlinEntityTypeException;
+import com.microsoft.spring.data.gremlin.conversion.*;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.repository.core.support.AbstractEntityInformation;
+import org.springframework.lang.NonNull;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -25,33 +27,33 @@ public class GremlinEntityInformation<T, ID> extends AbstractEntityInformation<T
     private Field id;
     private String entityLabel;
     private GremlinEntityType entityType;
+    private GremlinSource gremlinSource;
 
-    public GremlinEntityInformation(Class<T> domainClass) {
+    public GremlinEntityInformation(@NonNull Class<T> domainClass) {
         super(domainClass);
 
         this.id = this.getIdField(domainClass);
-        this.entityType = this.getGremlinEntityType(domainClass);
+        this.entityType = this.getGremlinEntityType(domainClass); // The other fields getter may depend on type
         this.entityLabel = this.getEntityLabel(domainClass);
+        this.gremlinSource = this.getGremlinSource(domainClass);
     }
 
     public GremlinEntityType getEntityType() {
         return this.entityType;
     }
 
-    public boolean isEdgeEntity() {
-        return this.entityType == GremlinEntityType.EDGE;
+    public GremlinSource getGremlinSource() {
+        return this.gremlinSource;
     }
 
-    public boolean isVertexEntity() {
-        return this.entityType == GremlinEntityType.VERTEX;
-    }
-
-    public boolean isGraphEntity() {
-        return this.entityType == GremlinEntityType.GRAPH;
-    }
-
+    @NonNull
     public String getEntityLabel() {
         return this.entityLabel;
+    }
+
+    @NonNull
+    public Field getIdField() {
+        return this.id;
     }
 
     @Override
@@ -66,7 +68,7 @@ public class GremlinEntityInformation<T, ID> extends AbstractEntityInformation<T
         return (Class<ID>) this.id.getType();
     }
 
-    private Field getIdField(Class<?> domainClass) {
+    private Field getIdField(@NonNull Class<?> domainClass) {
         Field idField;
         final List<Field> fields = FieldUtils.getFieldsListWithAnnotation(domainClass, Id.class);
 
@@ -87,7 +89,7 @@ public class GremlinEntityInformation<T, ID> extends AbstractEntityInformation<T
         return idField;
     }
 
-    private GremlinEntityType getGremlinEntityType(Class<?> domainClass) {
+    private GremlinEntityType getGremlinEntityType(@NonNull Class<?> domainClass) {
         final Vertex vertexAnnotation = domainClass.getAnnotation(Vertex.class);
 
         if (vertexAnnotation != null) {
@@ -109,7 +111,7 @@ public class GremlinEntityInformation<T, ID> extends AbstractEntityInformation<T
         throw new UnexpectedGremlinEntityTypeException("cannot not to identify gremlin entity type");
     }
 
-    private String getEntityLabel(Class<?> domainClass) {
+    private String getEntityLabel(@NonNull Class<?> domainClass) {
         final String label;
 
         switch (this.entityType) {
@@ -141,6 +143,39 @@ public class GremlinEntityInformation<T, ID> extends AbstractEntityInformation<T
         }
 
         return label;
+    }
+
+    private GremlinSource getGremlinSource(@NonNull Class<T> domainClass) {
+        final GremlinSource source;
+        final GremlinScript script;
+        final GremlinSourceWriter writer;
+
+        switch (this.entityType) {
+            case VERTEX:
+                source = new GremlinSourceVertex();
+                script = new GremlinScriptVertexLiteral();
+                writer = new GremlinSourceVertexWriter(this.getIdField(), this.getEntityLabel());
+                break;
+            case EDGE:
+                source = new GremlinSourceEdge();
+                script = new GremlinScriptEdgeLiteral();
+                writer = new GremlinSourceEdgeWriter(this.getIdField(), this.getEntityLabel());
+                break;
+            case GRAPH:
+                source = new GremlinSourceGraph();
+                script = new GremlinScriptGraphLiteral();
+                writer = new GremlinSourceGraphWriter(this.getIdField(), this.getEntityLabel());
+                break;
+            case UNKNOWN:
+                // fallthrough
+            default:
+                throw new IllegalArgumentException("Unexpected gremlin entity type");
+        }
+
+        source.setGremlinScriptStrategy(script);
+        source.setGremlinSourceWriter(writer);
+
+        return source;
     }
 }
 

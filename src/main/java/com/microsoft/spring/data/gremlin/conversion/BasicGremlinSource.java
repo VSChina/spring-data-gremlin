@@ -7,44 +7,68 @@ package com.microsoft.spring.data.gremlin.conversion;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
+import org.apache.tinkerpop.gremlin.driver.Result;
+import org.springframework.lang.NonNull;
+import org.springframework.util.Assert;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Getter
 @Setter
-public class BasicGremlinSource<T> implements GremlinSource {
+public class BasicGremlinSource implements GremlinSource {
 
     private String id;
     private String label;
     private Map<String, Object> properties;
 
     @Setter(AccessLevel.PRIVATE)
-    private GremlinScript<T> script;
+    private GremlinScript<String> scriptLiteral;
 
     @Setter(AccessLevel.PRIVATE)
-    private GremlinSourceWriter writer;
+    private GremlinSourceWriter sourceWriter;
+
+    @Setter(AccessLevel.PRIVATE)
+    private GremlinResultReader resultReader;
 
     public BasicGremlinSource() {
         this.properties = new HashMap<>();
     }
 
+    @Override
+    @SuppressWarnings("unchecked")
     public void setGremlinScriptStrategy(@NonNull GremlinScript script) {
-        this.setScript(script);
+        this.setScriptLiteral(script);
     }
 
+    @Override
     public void setGremlinSourceWriter(@NonNull GremlinSourceWriter writer) {
-        this.setWriter(writer);
+        this.setSourceWriter(writer);
     }
 
-    public T generateGremlinScript() {
-        return this.script.generateScript(this);
+    @Override
+    public void setGremlinResultReader(@NonNull GremlinResultReader reader) {
+        this.setResultReader(reader);
     }
 
-    public void doGremlinSourceWrite(Object domain) {
-        this.writer.writeEnityToGremlinSource(domain.getClass(), this);
+    @Override
+    public GremlinScript<String> getGremlinScriptLiteral() {
+        return this.scriptLiteral;
+    }
+
+    @Override
+    public void doGremlinSourceWrite(@NonNull Object domain, @NonNull MappingGremlinConverter converter) {
+        Assert.notNull(this.sourceWriter, "the sourceWriter must be set before do writing");
+
+        this.sourceWriter.write(domain.getClass(), converter, this);
+    }
+
+    @Override
+    public void doGremlinResultRead(@NonNull Result result) {
+        Assert.notNull(this.resultReader, "the resultReader must be set before do reading");
+
+        this.resultReader.read(result, this);
     }
 
     private boolean hasProperty(String key) {
@@ -60,3 +84,4 @@ public class BasicGremlinSource<T> implements GremlinSource {
         }
     }
 }
+

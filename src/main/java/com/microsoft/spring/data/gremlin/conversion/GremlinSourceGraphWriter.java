@@ -7,7 +7,9 @@ package com.microsoft.spring.data.gremlin.conversion;
 
 import com.microsoft.spring.data.gremlin.annotation.EdgeSet;
 import com.microsoft.spring.data.gremlin.annotation.VertexSet;
+import com.microsoft.spring.data.gremlin.exception.UnexpectedGremlinSourceTypeException;
 import com.microsoft.spring.data.gremlin.mapping.GremlinPersistentEntity;
+import com.microsoft.spring.data.gremlin.repository.support.GremlinEntityInformation;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.model.ConvertingPropertyAccessor;
 import org.springframework.lang.NonNull;
@@ -18,19 +20,17 @@ import java.util.List;
 
 public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implements GremlinSourceWriter {
 
-    public GremlinSourceGraphWriter(@NonNull Object domain) {
-        super(domain);
+    public GremlinSourceGraphWriter(@NonNull Field idField, @NonNull String label) {
+        super(idField, label);
     }
 
-    private void writeGraphSet(final Field field, List<Object> objectList,
-                               MappingGremlinConverter mappingConverter, GremlinSourceGraph sourceGraph) {
-        Assert.notNull(field, "field should not be null");
-        Assert.notNull(objectList, "GremlinSourcGraph should not be null");
-        Assert.notNull(mappingConverter, "GremlinSourcGraph should not be null");
-        Assert.notNull(sourceGraph, "GremlinSourcGraph should not be null");
+    @SuppressWarnings("unchecked")
+    private void writeGraphSet(@NonNull List<Object> objectList, @NonNull MappingGremlinConverter mappingConverter,
+                               @NonNull GremlinSourceGraph sourceGraph) {
+        Assert.isInstanceOf(GremlinSourceGraph.class, sourceGraph, "should be instance of GremlinSourceGraph ");
 
         for (final Object object : objectList) {
-            final GremlinEntityInformation information = new GremlinEntityInformation(object);
+            final GremlinEntityInformation information = new GremlinEntityInformation(object.getClass());
             final GremlinSource source = information.getGremlinSource();
 
             source.doGremlinSourceWrite(object, mappingConverter);
@@ -41,14 +41,12 @@ public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implement
     @Override
     @SuppressWarnings("unchecked")
     public void write(Object domain, MappingGremlinConverter converter, GremlinSource source) {
-        if (domain == null || converter == null || source == null || source instanceof GremlinSourceGraph) {
-            throw new IllegalArgumentException("Invalid argument of write method");
+        if (!(source instanceof GremlinSourceGraph)) {
+            throw new UnexpectedGremlinSourceTypeException("should be the instance of GremlinSourceEdge");
         }
 
-        source.setId(super.getPersistentEntityId());
-
         final GremlinSourceGraph sourceGraph = (GremlinSourceGraph) source;
-        final GremlinPersistentEntity<?> persistentEntity = converter.getPersistentEntity(domain.getClass());
+        final GremlinPersistentEntity<?> persistentEntity = converter.getPersistentEntity(domain);
         final ConvertingPropertyAccessor accessor = converter.getPropertyAccessor(domain);
 
         for (final Field field : domain.getClass().getDeclaredFields()) {
@@ -56,10 +54,10 @@ public class GremlinSourceGraphWriter extends BasicGremlinSourceWriter implement
             Assert.notNull(property, "persistence property should not be null");
             final List<Object> objectList = (List<Object>) accessor.getProperty(property);
 
-            if (field.getAnnotatedType().getType() == VertexSet.class
-                || field.getAnnotatedType().getType() == EdgeSet.class) {
-                this.writeGraphSet(field, objectList, converter, sourceGraph);
+            if (field.getAnnotation(VertexSet.class) != null || field.getAnnotation(EdgeSet.class) != null) {
+                this.writeGraphSet(objectList, converter, sourceGraph);
             }
         }
     }
 }
+
