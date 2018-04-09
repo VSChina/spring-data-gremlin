@@ -5,7 +5,9 @@
  */
 package com.microsoft.spring.data.gremlin.exception;
 
-public class GremlinInsertionException extends IllegalStateException {
+import org.springframework.dao.DataAccessResourceFailureException;
+
+public class GremlinInsertionException extends DataAccessResourceFailureException {
 
     public GremlinInsertionException(String msg) {
         super(msg);
