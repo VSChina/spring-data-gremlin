@@ -21,7 +21,6 @@ import java.lang.reflect.Field;
 @NoArgsConstructor
 public class GremlinSourceVertexReader implements GremlinSourceReader {
 
-
     @Override
     public <T extends Object> T read(@NonNull Class<T> type, @NonNull MappingGremlinConverter converter,
                                      @NonNull GremlinSource source) {
