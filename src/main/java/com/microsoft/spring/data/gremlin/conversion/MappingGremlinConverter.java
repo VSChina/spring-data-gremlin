@@ -13,11 +13,14 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.support.GenericConversionService;
 import org.springframework.data.convert.EntityConverter;
+import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.PersistentPropertyAccessor;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.mapping.model.ConvertingPropertyAccessor;
 import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
+
+import java.lang.reflect.Field;
 
 public class MappingGremlinConverter
         implements EntityConverter<GremlinPersistentEntity<?>, GremlinPersistentProperty, Object, GremlinSource>,
@@ -64,7 +67,7 @@ public class MappingGremlinConverter
     }
 
     public ConvertingPropertyAccessor getPropertyAccessor(@NonNull Object domain) {
-        final GremlinPersistentEntity<?> persistentEntity = this.getPersistentEntity(domain);
+        final GremlinPersistentEntity<?> persistentEntity = this.getPersistentEntity(domain.getClass());
         Assert.notNull(persistentEntity, "persistentEntity should not be null");
 
         final PersistentPropertyAccessor accessor = persistentEntity.getPropertyAccessor(domain);
@@ -72,8 +75,20 @@ public class MappingGremlinConverter
         return new ConvertingPropertyAccessor(accessor, this.conversionService);
     }
 
-    public GremlinPersistentEntity<?> getPersistentEntity(@NonNull Object domain) {
-        return mappingContext.getPersistentEntity(domain.getClass());
+    public GremlinPersistentEntity<?> getPersistentEntity(@NonNull Class<?> domainClass) {
+        return mappingContext.getPersistentEntity(domainClass);
+    }
+
+    public Object getFieldValue(@NonNull Object domain, @NonNull Field field) {
+        final ConvertingPropertyAccessor accessor = this.getPropertyAccessor(domain);
+        final GremlinPersistentEntity<?> persistentEntity = this.getPersistentEntity(domain.getClass());
+        final PersistentProperty property = persistentEntity.getPersistentProperty(field.getName());
+        Assert.notNull(property, "persistence property should not be null");
+
+        final Object value = accessor.getProperty(property);
+        Assert.notNull(value, "PersistentProperty should not be null");
+
+        return value;
     }
 }
 

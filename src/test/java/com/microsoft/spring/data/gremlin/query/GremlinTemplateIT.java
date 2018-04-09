@@ -14,7 +14,6 @@ import com.microsoft.spring.data.gremlin.common.domain.Project;
 import com.microsoft.spring.data.gremlin.common.domain.Relationship;
 import com.microsoft.spring.data.gremlin.conversion.MappingGremlinConverter;
 import com.microsoft.spring.data.gremlin.mapping.GremlinMappingContext;
-import org.apache.commons.lang3.NotImplementedException;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,6 +25,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.data.annotation.Persistent;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.util.Assert;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @PropertySource(value = {"classpath:application.properties"})
@@ -97,7 +97,21 @@ public class GremlinTemplateIT {
 
     @Test
     public void testVertexDeleteAll() {
-        throw new NotImplementedException("DeleteAll IT of vertex not implemented");
+        Person personVertex = this.template.findVertexById(this.person.getId(), Person.class);
+        Project projectVertex = this.template.findVertexById(this.project.getId(), Project.class);
+
+        Assert.notNull(personVertex, "personVertex should not be null");
+        Assert.notNull(projectVertex, "projectVertex should not be null");
+
+        this.template.deleteAll();
+
+        personVertex = this.template.findVertexById(this.person.getId(), Person.class);
+        projectVertex = this.template.findVertexById(this.project.getId(), Project.class);
+
+        Assert.isNull(personVertex, "personVertex should be null");
+        Assert.isNull(projectVertex, "projectVertex should be null");
+
+        // Todo(pan): should add findVertexAll here.
     }
 }
 

@@ -5,15 +5,13 @@
  */
 package com.microsoft.spring.data.gremlin.exception;
 
-import org.springframework.dao.DataAccessResourceFailureException;
+public class InvalidGremlinEntityIdFieldException extends GremlinEntityInformationException {
 
-public class GremlinInsertionException extends DataAccessResourceFailureException {
-
-    public GremlinInsertionException(String msg) {
+    public InvalidGremlinEntityIdFieldException(String msg) {
         super(msg);
     }
 
-    public GremlinInsertionException(String msg, Throwable cause) {
+    public InvalidGremlinEntityIdFieldException(String msg, Throwable cause) {
         super(msg, cause);
     }
 }
