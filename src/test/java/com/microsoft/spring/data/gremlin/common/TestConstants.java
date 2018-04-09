@@ -59,4 +59,8 @@ public class TestConstants {
     public static final String LIBM_NAME = "libm";
     public static final String DEPENDENCY_ID = "27432";
     public static final String DEPENDENCY_NAME = "dynamic link";
+
+    public static final String PROPERTY_ID = "id";
+    public static final String PROPERTY_NAME = "name";
+    public static final String PROPERTY_LOCATION = "location";
 }
