@@ -13,6 +13,7 @@ public class Constants {
     public static final String PROPERTY_ID = "id";
     public static final String PROPERTY_LABEL = "label";
     public static final String PROPERTY_TYPE = "type";
+    public static final String PROPERTY_VALUE = "value";
     public static final String PROPERTY_PROPERTIES = "properties";
     public static final String PROPERTY_INV = "inV";
     public static final String PROPERTY_OUTV = "outV";
