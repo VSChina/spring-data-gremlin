@@ -15,6 +15,7 @@ public class TestConstants {
     public static final String FAKE_USERNAME = "XXX-xxx.username";
     public static final String FAKE_PASSWORD = "XXX-xxx.password";
     public static final String EMPTY_STRING = "";
+    public static final String PROPERTY_ID = "id";
 
     public static final String VERTEX_PERSON_LABEL = "label-person";
     public static final String VERTEX_PROJECT_LABEL = "label-project";
