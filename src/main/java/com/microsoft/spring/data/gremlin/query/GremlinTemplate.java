@@ -7,6 +7,7 @@ package com.microsoft.spring.data.gremlin.query;
 
 import com.microsoft.spring.data.gremlin.common.GremlinFactory;
 import com.microsoft.spring.data.gremlin.conversion.*;
+import com.microsoft.spring.data.gremlin.exception.GremlinFindException;
 import com.microsoft.spring.data.gremlin.exception.GremlinInsertionException;
 import com.microsoft.spring.data.gremlin.repository.support.GremlinEntityInformation;
 import org.apache.tinkerpop.gremlin.driver.Client;
@@ -18,6 +19,7 @@ import org.springframework.lang.NonNull;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.concurrent.CompletionException;
 
 
 public class GremlinTemplate implements GremlinOperations, ApplicationContextAware {
@@ -60,7 +62,7 @@ public class GremlinTemplate implements GremlinOperations, ApplicationContextAwa
 
         try {
             client.submit(script.generateScript(source)).all().join();
-        } catch (RuntimeException e) {
+        } catch (CompletionException e) {
             final String typeName = object.getClass().getName();
             throw new GremlinInsertionException(String.format("unable to insert type %s from gremlin", typeName), e);
         }
@@ -78,13 +80,17 @@ public class GremlinTemplate implements GremlinOperations, ApplicationContextAwa
 
         try {
             results = client.submit(script.generateScript(source)).all().join();
-        } catch (RuntimeException e) {
-            return null; // If cannot find the vertex by Id, ignore exception and return null
+        } catch (CompletionException e) {
+            final String typeName = domainClass.getName();
+            throw new GremlinFindException(String.format("unable to complete find %s from gremlin", typeName), e);
         }
 
-        Assert.isTrue(results.size() == 1, "should be only 1 one vertex with given id");
+        if (results.isEmpty()) {
+            return null;
+        }
 
         source.doGremlinResultRead(results.get(0));
+        Assert.isTrue(results.size() == 1, "should be only 1 one vertex with given id");
 
         return this.mappingConverter.read(domainClass, source);
     }
