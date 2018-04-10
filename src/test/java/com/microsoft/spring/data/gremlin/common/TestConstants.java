@@ -6,9 +6,6 @@
 package com.microsoft.spring.data.gremlin.common;
 
 public class TestConstants {
-    private TestConstants() {
-        // Hide default constructor
-    }
 
     public static final int DEFAULT_ENDPOINT_PORT = 443;
     public static final String FAKE_ENDPOINT = "XXX-xxx.XXX-xxx.cosmosdb.azure.com";
@@ -60,4 +57,9 @@ public class TestConstants {
     public static final String LIBM_NAME = "libm";
     public static final String DEPENDENCY_ID = "27432";
     public static final String DEPENDENCY_NAME = "dynamic link";
+
+    private TestConstants() {
+        // Hide default constructor
+    }
+
 }
