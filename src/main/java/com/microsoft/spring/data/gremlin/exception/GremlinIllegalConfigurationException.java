@@ -5,15 +5,15 @@
  */
 package com.microsoft.spring.data.gremlin.exception;
 
-import org.springframework.lang.Nullable;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
-public class GremlinIllegalConfigurationException extends IllegalArgumentException {
+public class GremlinIllegalConfigurationException extends InvalidDataAccessApiUsageException {
 
     public GremlinIllegalConfigurationException(String msg) {
         super(msg);
     }
 
-    public GremlinIllegalConfigurationException(@Nullable String msg, @Nullable Throwable cause) {
+    public GremlinIllegalConfigurationException(String msg, Throwable cause) {
         super(msg, cause);
     }
 }
