@@ -26,7 +26,7 @@ public class BasicGremlinResultReader {
      *         T is LinkedHashMap<String, String>
      */
     @SuppressWarnings("unchecked")
-    void readResultProperties(@NonNull Map<String, Object> properties, @NonNull GremlinSource source) {
+    protected void readResultProperties(@NonNull Map<String, Object> properties, @NonNull GremlinSource source) {
         Assert.isTrue(source.getProperties().isEmpty(), "should be empty GremlinSource");
 
         for (final Map.Entry<String, Object> entry : properties.entrySet()) {
