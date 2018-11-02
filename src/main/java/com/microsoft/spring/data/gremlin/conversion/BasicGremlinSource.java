@@ -39,6 +39,8 @@ public class BasicGremlinSource implements GremlinSource {
         this.properties = new HashMap<>();
     }
 
+    private String abc = "";
+    
     @Override
     @SuppressWarnings("unchecked")
     public void setGremlinScriptStrategy(@NonNull GremlinScript script) {
